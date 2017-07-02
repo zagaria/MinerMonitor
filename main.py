@@ -22,6 +22,7 @@ minerArg = '/your_path_to_config/xmr.conf'
 acceptedBlock = 0
 rejectBlock = 0
 allBlock = 0
+shareMaxWaitTime = 5 # In minutes
 
 minerProcess = pexpect.spawn(minerPath,[minerArg],timeout=1)
 
@@ -35,6 +36,10 @@ while 1:
                 temp = float(f.read())
 		nowTime = time.time()
 		day,hour,minute,second = monitor.SecondToTime(int(nowTime-(lastTimeSuccess,nowTime)[(lastTimeSuccess==0)]))
+		if (minute>shareMaxWaitTime):
+			monitor.KillMinerByName(minerName)
+                        minerProcess = pexpect.spawn(minerPath,[minerArg],timeout=1)
+                        lastTimeSuccess = time.time()
                 print(">>> CPU Temp:"+str(temp)+" Last accepted: "+str(minute)+" min "+str(second)+" s All: "+str(acceptedBlock)+"/"+str(allBlock))
 		while not minerProcess.eof():
 		    strLine = minerProcess.readline()

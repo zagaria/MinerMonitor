@@ -19,3 +19,6 @@ def KillMinerByPID(pid):
 	p = psutil.Process(pid)
 	p.terminate()
 
+def KillMinerByName(name):
+        minerPID = GetMinerPID(name)
+        KillMinerByPID(minerPID)
